@@ -47,11 +47,11 @@ function App() {
 
   function onsubmit(data) {
     if (editMacine) {
-      Axios.patch(`/sewing-machines/${editMacine}`, { data })
+      Axios.patch(`/sewing-machines/${editMacine}`, { ...data })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     } else {
-      Axios.post("/sewing-machines", { data })
+      Axios.post("/sewing-machines", { ...data })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     }
