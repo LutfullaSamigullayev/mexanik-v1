@@ -94,25 +94,16 @@ function App() {
       dataIndex: "model",
     },
     {
-      title: "Ignalari soni",
-      dataIndex: "needles",
-    },
-    {
-      title: "Elektr toki",
-      dataIndex: "powerConsumption",
-    },
-    {
-      title: "Havo bosimi",
-      render: (item) => (item.pressure ? "Ha" : "Yo'q"),
-      // dataIndex: "pressure",
-    },
-    {
       title: "Maksimal tezlik",
       dataIndex: "speed",
     },
     {
       title: "Filial",
       dataIndex: "location",
+    },
+    {
+      title: "Liniyasi",
+      dataIndex: "line",
     },
     {
       title: "Seria raqami",
@@ -136,8 +127,7 @@ function App() {
               setValue("company", item.company);
               setValue("model", item.model);
               setValue("needles", item.needles);
-              setValue("powerConsumption", item.powerConsumption);
-              setValue("pressure", item.pressure);
+              setValue("line", item.line);
               setValue("speed", item.speed);
               setValue("location", item.location);
               setValue("serialNumber", item.serialNumber);
@@ -186,27 +176,6 @@ function App() {
           />
           <Controller
             control={control}
-            name="needles"
-            render={({ field }) => (
-              <Input placeholder="Ignalari soni" {...field} />
-            )}
-          />
-          <Controller
-            control={control}
-            name="powerConsumption"
-            render={({ field }) => (
-              <Input placeholder="Elektr toki" {...field} />
-            )}
-          />
-          <Controller
-            control={control}
-            name="pressure"
-            render={({ field }) => (
-              <Input placeholder="Havo bosimi" {...field} />
-            )}
-          />
-          <Controller
-            control={control}
             name="speed"
             render={({ field }) => (
               <Input placeholder="Maksimal tezlik" {...field} />
@@ -216,6 +185,11 @@ function App() {
             control={control}
             name="location"
             render={({ field }) => <Input placeholder="Filial" {...field} />}
+          />
+          <Controller
+            control={control}
+            name="line"
+            render={({ field }) => <Input placeholder="Liniyasi" {...field} />}
           />
           <Controller
             control={control}
