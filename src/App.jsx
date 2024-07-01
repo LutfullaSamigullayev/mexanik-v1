@@ -93,10 +93,10 @@ function App() {
       title: "Modeli",
       dataIndex: "model",
     },
-    {
-      title: "Maksimal tezlik",
-      dataIndex: "speed",
-    },
+    // {
+    //   title: "Maksimal tezlik",
+    //   dataIndex: "speed",
+    // },
     {
       title: "Filial",
       dataIndex: "location",
@@ -128,7 +128,7 @@ function App() {
               setValue("model", item.model);
               setValue("needles", item.needles);
               setValue("line", item.line);
-              setValue("speed", item.speed);
+              // setValue("speed", item.speed);
               setValue("location", item.location);
               setValue("serialNumber", item.serialNumber);
               setValue("inventoryNumber", item.inventoryNumber);
@@ -174,13 +174,13 @@ function App() {
             name="model"
             render={({ field }) => <Input placeholder="Modeli" {...field} />}
           />
-          <Controller
+          {/* <Controller
             control={control}
             name="speed"
             render={({ field }) => (
               <Input placeholder="Maksimal tezlik" {...field} />
             )}
-          />
+          /> */}
           <Controller
             control={control}
             name="location"
