@@ -131,7 +131,7 @@ function App() {
             onClick={() => {
               setEditMacine(item.id);
               setIsModalOpen(true);
-              setValue("id", item.id);
+              // setValue("id", item.id);
               setValue("category", item.category);
               setValue("company", item.company);
               setValue("model", item.model);
@@ -164,11 +164,11 @@ function App() {
         footer={null}
       >
         <Form onFinish={handleSubmit(onsubmit)}>
-          <Controller
+          {/* <Controller
             control={control}
             name="id"
             render={({ field }) => <Input placeholder="Id" {...field} />}
-          />
+          /> */}
           <Controller
             control={control}
             name="category"
