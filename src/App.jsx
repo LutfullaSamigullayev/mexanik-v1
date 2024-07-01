@@ -19,6 +19,7 @@ function App() {
 
   const showModal = () => {
     setIsModalOpen(true);
+    reset();
   };
 
   const handleCancel = () => {
