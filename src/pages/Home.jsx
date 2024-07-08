@@ -221,6 +221,6 @@ const Home = () => {
       </Modal>
     </>
   );
-}
+};
 
 export default Home;
