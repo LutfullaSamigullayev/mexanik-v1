@@ -1,5 +1,7 @@
-import { Home } from "./pages/Home";
+import Home from "./pages/Home";
+import LogOut from "./pages/LogOut";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 
 
