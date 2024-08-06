@@ -4,14 +4,23 @@ import { Axios } from "../lib/axios";
 import { Controller, useForm } from "react-hook-form";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Space, Switch } from "antd";
+import { useSelector } from "react-redux";
 
 const Machines = () => {
+  const filial = useSelector((state) => state.filial);
   // -----------  Data start ------------------
 
   const [sewingMachines, setSewingMachines] = useState([]);
 
   const [deleteMacine, setDeleteMacine] = useState(null);
   const [editMacine, setEditMacine] = useState(null);
+
+  const [category, setCategory] = useState([
+    "lockstitch-machine",
+    "overlock",
+    "regula-rechma",
+    "duz-rechma",
+  ]);
 
   // -----------  Data end ------------------
 
@@ -39,14 +48,40 @@ const Machines = () => {
   // -----------  Axios start ------------------
 
   async function getMacines() {
-    const res = await Axios.get("/sewing-machines");
-    setSewingMachines(res.data);
+    let url = `/sewing-machines?location=${filial.toLowerCase()}`;
+
+    if (filial) {
+      if (!category.length) {
+        url += `&category[]=`;
+      } else {
+        for (let item of category) {
+          url += `&category[]=${item}`;
+        }
+      }
+      const res = await Axios.get(url);
+      setSewingMachines(res.data);
+    } else {
+      let url = "/sewing-machines";
+
+      if (!category.length) {
+        url += `&category[]=`;
+      } else {
+        for (let i = 0; i < category.length; i++) {
+          if (i === 0) {
+            url += `?category[]=${category[i]}`;
+          } else {
+            url += `&category[]=${category[i]}`;
+          }
+        }
+      }
+      const res = await Axios.get();
+      setSewingMachines(res.data);
+    }
   }
 
   useEffect(() => {
     getMacines();
-    console.log(sewingMachines);
-  }, []);
+  }, [filial, category]);
 
   function onsubmit(data) {
     if (editMacine) {
@@ -145,6 +180,10 @@ const Machines = () => {
     },
   ];
 
+  useEffect(() => {
+    console.log(category);
+  }, [category]);
+
   // -----------  Table end ------------------
 
   return (
@@ -153,32 +192,60 @@ const Machines = () => {
         <div className="w-fit ">
           <Space direction="horizontal" className="flex gap-x-6">
             <div className="w-fit flex gap-x-1 items-center">
-              Shovot
+              odnosrochka
               <Switch
+                onChange={(checked) =>
+                  checked
+                    ? setCategory([...category, "lockstitch-machine"])
+                    : setCategory(
+                        category.filter((item) => item !== "lockstitch-machine")
+                      )
+                }
                 checkedChildren={<CheckOutlined />}
                 unCheckedChildren={<CloseOutlined />}
                 defaultChecked
               />
             </div>
             <div className="w-fit flex gap-x-1 items-center">
-              Urganch
+              overlock
               <Switch
+                onChange={(checked) =>
+                  checked
+                    ? setCategory([...category, "overlock"])
+                    : setCategory(
+                        category.filter((item) => item !== "overlock")
+                      )
+                }
                 checkedChildren={<CheckOutlined />}
                 unCheckedChildren={<CloseOutlined />}
                 defaultChecked
               />
             </div>
             <div className="w-fit flex gap-x-1 items-center">
-              Katqal'a
+              regula-rechma
               <Switch
+                onChange={(checked) =>
+                  checked
+                    ? setCategory([...category, "regula-rechma"])
+                    : setCategory(
+                        category.filter((item) => item !== "regula-rechma")
+                      )
+                }
                 checkedChildren={<CheckOutlined />}
                 unCheckedChildren={<CloseOutlined />}
                 defaultChecked
               />
             </div>
             <div className="w-fit flex gap-x-1 items-center">
-              Urganch
+              duz-rechma
               <Switch
+                onChange={(checked) =>
+                  checked
+                    ? setCategory([...category, "duz-rechma"])
+                    : setCategory(
+                        category.filter((item) => item !== "duz-rechma")
+                      )
+                }
                 checkedChildren={<CheckOutlined />}
                 unCheckedChildren={<CloseOutlined />}
                 defaultChecked

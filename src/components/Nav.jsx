@@ -1,126 +1,114 @@
-// import { Logo } from "./Logo";
-import React, { useState } from "react";
 import {
-  AppstoreOutlined,
-  ContainerOutlined,
-  DesktopOutlined,
-  MailOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  PieChartOutlined,
+  GlobalOutlined,
   CheckSquareOutlined,
+  ContainerOutlined,
 } from "@ant-design/icons";
-import { Button, Menu } from "antd";
-import { Icons } from "./icons";
-import { Logo } from "./Logo";
-const items = [
-  {
-    key: "1",
-    icon: (
-      <div className="anticon anticon-desktop ant-menu-item-icon">
-        <Icons.machine />
-      </div>
-    ),
+import { Menu } from "antd";
+import { useDispatch } from "react-redux";
+import { setFilial } from "../redux/slices/machineSlice";
 
-    label: "Mashinalar",
-  },
-  {
-    key: "2",
-    icon: <CheckSquareOutlined />,
-    label: "Inventarizatsiya",
-  },
-  {
-    key: "3",
-    icon: <ContainerOutlined />,
-    label: "Mexaniklar",
-  },
-  // {
-  //   key: "sub1",
-  //   label: "Navigation One",
-  //   icon: <MailOutlined />,
-  //   children: [
-  //     {
-  //       key: "5",
-  //       label: "Option 5",
-  //     },
-  //     {
-  //       key: "6",
-  //       label: "Option 6",
-  //     },
-  //     {
-  //       key: "7",
-  //       label: "Option 7",
-  //     },
-  //     {
-  //       key: "8",
-  //       label: "Option 8",
-  //     },
-  //   ],
-  // },
-  // {
-  //   key: "sub2",
-  //   label: "Navigation Two",
-  //   icon: <AppstoreOutlined />,
-  //   children: [
-  //     {
-  //       key: "9",
-  //       label: "Option 9",
-  //     },
-  //     {
-  //       key: "10",
-  //       label: "Option 10",
-  //     },
-  //     {
-  //       key: "sub3",
-  //       label: "Submenu",
-  //       children: [
-  //         {
-  //           key: "11",
-  //           label: "Option 11",
-  //         },
-  //         {
-  //           key: "12",
-  //           label: "Option 12",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
-];
+const Nav4 = () => {
+  const dispatch = useDispatch();
 
-export function Nav() {
-  const [collapsed, setCollapsed] = useState(false);
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+  const items = [
+    {
+      key: "filial",
+      label: "Filiallar",
+      icon: <GlobalOutlined />,
+      children: [
+        {
+          key: "kat-qala",
+          label: "Kat qal'a",
+          value: "kat-qala",
+
+          // label: <Link to={"/"}>Hammasi</Link>,
+          // onClick: () => dispatch(setFilial("kat-qala")),
+        },
+        {
+          key: "shovot",
+          label: "Shovot",
+          // onClick: () => dispatch(setFilial("shovot")),
+        },
+        {
+          key: "urganch",
+          label: "Urganch",
+          // onClick: () => dispatch(setFilial("urganch")),
+        },
+      ],
+    },
+
+    {
+      key: "inventory",
+      label: "Inventarizatsiya",
+      icon: <CheckSquareOutlined />,
+      children: [
+        {
+          key: "inventory-kat-qala",
+          label: "Kat qal'a",
+        },
+        {
+          key: "inventory-shovot",
+          label: "Shovot",
+        },
+        {
+          key: "inventory-urganch",
+          label: "Urganch",
+        },
+      ],
+    },
+    // {
+    //   type: "divider",
+    // },
+    {
+      key: "mehaniklar",
+      label: "Mexaniklar",
+      icon: <ContainerOutlined />,
+      children: [
+        {
+          key: "mehanik-kat-qala",
+          label: "Kat-qala",
+        },
+        {
+          key: "mehanik-shovot",
+          label: "Shovot",
+        },
+        {
+          key: "mehanik-urganch",
+          label: "Urganch",
+        },
+      ],
+    },
+    // {
+    //   key: "grp",
+    //   label: "Uztex Group",
+    //   type: "group",
+    //   children: [
+    //     {
+    //       key: "about",
+    //       label: "About",
+    //     },
+    //     {
+    //       key: "contact",
+    //       label: "Contact",
+    //     },
+    //   ],
+    // },
+  ];
+
+  const onClick = (e) => {
+    dispatch(setFilial(e.key));
   };
-  const [menuWidth, setMenuWidth] = useState(256);
   return (
-    <div
+    <Menu
+      onClick={onClick}
       style={{
-        width: 256,
+        width: 200,
       }}
-    >
-      <div className="flex items-center justify-center relative border-b min-h-[77px]">
-        <Logo />
-        <Button
-          type="primary"
-          onClick={toggleCollapsed}
-          style={{
-            marginBottom: 16,
-          }}
-          className="absolute right-0 top-2/4 -translate-y-1/2 translate-x-1/2"
-        >
-          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-        </Button>
-      </div>
-      <Menu
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
-        mode="inline"
-        theme="light"
-        inlineCollapsed={collapsed}
-        items={items}
-      />
-    </div>
+      defaultSelectedKeys={["kat-qala"]}
+      defaultOpenKeys={["filial"]}
+      mode="inline"
+      items={items}
+    />
   );
-}
+};
+export default Nav4;
