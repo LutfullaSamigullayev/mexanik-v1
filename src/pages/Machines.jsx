@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { Button, Form, Input, Modal, Table } from "antd";
 import { Axios } from "../lib/axios";
 import { Controller, useForm } from "react-hook-form";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Space, Switch } from "antd";
 import { useSelector } from "react-redux";
+import { Categories } from "../components/Categories";
+import { Selected } from "../components/Selected";
 
 const Machines = () => {
-  const filial = useSelector((state) => state.filial);
   // -----------  Data start ------------------
 
   const [sewingMachines, setSewingMachines] = useState([]);
@@ -15,14 +14,25 @@ const Machines = () => {
   const [deleteMacine, setDeleteMacine] = useState(null);
   const [editMacine, setEditMacine] = useState(null);
 
-  const [category, setCategory] = useState([
-    "lockstitch-machine",
-    "overlock",
-    "regula-rechma",
-    "duz-rechma",
-  ]);
-
   // -----------  Data end ------------------
+
+  // -----------  Redux start ------------------
+
+  const filial = useSelector((state) => state.filial);
+
+  const category = useSelector((state) => state.category);
+
+  const line = useSelector((state) => state.line);
+
+  // -----------  Redux end ------------------
+
+  // -----------  Table Page start ------------------
+
+  const [page, setPage] = useState(1);
+
+  const [paginationSize, setPaginationSize] = useState(10); //your current default pagination size 25
+
+  // -----------  Table Page end ------------------
 
   // -----------  Modal start ------------------
 
@@ -58,6 +68,14 @@ const Machines = () => {
           url += `&category[]=${item}`;
         }
       }
+
+      if (!line.length) {
+        url += ``;
+      } else {
+        for (let item of line) {
+          url += `&line[]=${item}`;
+        }
+      }
       const res = await Axios.get(url);
       setSewingMachines(res.data);
     } else {
@@ -74,6 +92,19 @@ const Machines = () => {
           }
         }
       }
+
+      if (!line.length) {
+        url += ``;
+      } else {
+        for (let i = 0; i < line.length; i++) {
+          if (i === 0) {
+            url += `?line[]=${line[i]}`;
+          } else {
+            url += `&line[]=${line[i]}`;
+          }
+        }
+      }
+
       const res = await Axios.get();
       setSewingMachines(res.data);
     }
@@ -81,7 +112,7 @@ const Machines = () => {
 
   useEffect(() => {
     getMacines();
-  }, [filial, category]);
+  }, [filial, category, line]);
 
   function onsubmit(data) {
     if (editMacine) {
@@ -114,8 +145,8 @@ const Machines = () => {
 
   const columns = [
     {
-      title: "Id",
-      dataIndex: "id",
+      title: "№",
+      render: (value, item, index) => (page - 1) * paginationSize + index + 1,
     },
     {
       title: "Nomi",
@@ -131,10 +162,6 @@ const Machines = () => {
       title: "Modeli",
       dataIndex: "model",
     },
-    // {
-    //   title: "Maksimal tezlik",
-    //   dataIndex: "speed",
-    // },
     {
       title: "Filial",
       dataIndex: "location",
@@ -160,13 +187,11 @@ const Machines = () => {
             onClick={() => {
               setEditMacine(item.id);
               setIsModalOpen(true);
-              // setValue("id", item.id);
               setValue("category", item.category);
               setValue("company", item.company);
               setValue("model", item.model);
               setValue("needles", item.needles);
               setValue("line", item.line);
-              // setValue("speed", item.speed);
               setValue("location", item.location);
               setValue("serialNumber", item.serialNumber);
               setValue("inventoryNumber", item.inventoryNumber);
@@ -180,79 +205,13 @@ const Machines = () => {
     },
   ];
 
-  useEffect(() => {
-    console.log(category);
-  }, [category]);
-
   // -----------  Table end ------------------
 
   return (
     <>
       <div className=" flex items-center justify-between p-3">
-        <div className="w-fit ">
-          <Space direction="horizontal" className="flex gap-x-6">
-            <div className="w-fit flex gap-x-1 items-center">
-              odnosrochka
-              <Switch
-                onChange={(checked) =>
-                  checked
-                    ? setCategory([...category, "lockstitch-machine"])
-                    : setCategory(
-                        category.filter((item) => item !== "lockstitch-machine")
-                      )
-                }
-                checkedChildren={<CheckOutlined />}
-                unCheckedChildren={<CloseOutlined />}
-                defaultChecked
-              />
-            </div>
-            <div className="w-fit flex gap-x-1 items-center">
-              overlock
-              <Switch
-                onChange={(checked) =>
-                  checked
-                    ? setCategory([...category, "overlock"])
-                    : setCategory(
-                        category.filter((item) => item !== "overlock")
-                      )
-                }
-                checkedChildren={<CheckOutlined />}
-                unCheckedChildren={<CloseOutlined />}
-                defaultChecked
-              />
-            </div>
-            <div className="w-fit flex gap-x-1 items-center">
-              regula-rechma
-              <Switch
-                onChange={(checked) =>
-                  checked
-                    ? setCategory([...category, "regula-rechma"])
-                    : setCategory(
-                        category.filter((item) => item !== "regula-rechma")
-                      )
-                }
-                checkedChildren={<CheckOutlined />}
-                unCheckedChildren={<CloseOutlined />}
-                defaultChecked
-              />
-            </div>
-            <div className="w-fit flex gap-x-1 items-center">
-              duz-rechma
-              <Switch
-                onChange={(checked) =>
-                  checked
-                    ? setCategory([...category, "duz-rechma"])
-                    : setCategory(
-                        category.filter((item) => item !== "duz-rechma")
-                      )
-                }
-                checkedChildren={<CheckOutlined />}
-                unCheckedChildren={<CloseOutlined />}
-                defaultChecked
-              />
-            </div>
-          </Space>
-        </div>
+        <Categories />
+        <Selected />
         <Button type="primary" onClick={showModal}>
           Mashina qo'shish
         </Button>
@@ -264,11 +223,6 @@ const Machines = () => {
         footer={null}
       >
         <Form onFinish={handleSubmit(onsubmit)}>
-          {/* <Controller
-            control={control}
-            name="id"
-            render={({ field }) => <Input placeholder="Id" {...field} />}
-          /> */}
           <Controller
             control={control}
             name="category"
@@ -284,13 +238,7 @@ const Machines = () => {
             name="model"
             render={({ field }) => <Input placeholder="Modeli" {...field} />}
           />
-          {/* <Controller
-            control={control}
-            name="speed"
-            render={({ field }) => (
-              <Input placeholder="Maksimal tezlik" {...field} />
-            )}
-          /> */}
+
           <Controller
             control={control}
             name="location"
@@ -318,7 +266,19 @@ const Machines = () => {
           <Button htmlType="submit">Submit</Button>
         </Form>
       </Modal>
-      <Table dataSource={sewingMachines} columns={columns} />
+      <Table
+        pagination={{
+          defaultPageSize: 10,
+          pageSize: paginationSize,
+          onChange: (page, pageSize) => {
+            setPage(page);
+            setPaginationSize(pageSize);
+          },
+          showSizeChanger: true,
+        }}
+        dataSource={sewingMachines}
+        columns={columns}
+      />
       <Modal
         open={deleteMacine}
         onOk={onDeleteMachine}
