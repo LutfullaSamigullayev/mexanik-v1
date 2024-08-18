@@ -12,3 +12,7 @@ body,
 body {
     font-family: sans-serif;
 }
+
+.ant-modal-content {
+    width: fit-content;
+}

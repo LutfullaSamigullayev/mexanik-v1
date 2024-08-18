@@ -22,17 +22,17 @@ const Nav4 = () => {
           value: "kat-qala",
 
           // label: <Link to={"/"}>Hammasi</Link>,
-          // onClick: () => dispatch(setFilial("kat-qala")),
+          onClick: () => dispatch(setFilial("kat-qala")),
         },
         {
           key: "shovot",
           label: "Shovot",
-          // onClick: () => dispatch(setFilial("shovot")),
+          onClick: () => dispatch(setFilial("shovot")),
         },
         {
           key: "urganch",
           label: "Urganch",
-          // onClick: () => dispatch(setFilial("urganch")),
+          onClick: () => dispatch(setFilial("urganch")),
         },
       ],
     },
@@ -45,14 +45,17 @@ const Nav4 = () => {
         {
           key: "inventory-kat-qala",
           label: "Kat qal'a",
+          onClick: () => dispatch(setFilial("kat-qala")),
         },
         {
           key: "inventory-shovot",
           label: "Shovot",
+          onClick: () => dispatch(setFilial("shovot")),
         },
         {
           key: "inventory-urganch",
           label: "Urganch",
+          onClick: () => dispatch(setFilial("urganch")),
         },
       ],
     },
@@ -96,7 +99,7 @@ const Nav4 = () => {
   ];
 
   const onClick = (e) => {
-    dispatch(setFilial(e.key));
+    // dispatch(setFilial(e.key));
   };
   return (
     <Menu

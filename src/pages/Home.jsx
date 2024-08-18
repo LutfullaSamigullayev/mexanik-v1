@@ -1,7 +1,7 @@
 import { Header } from "../components/Header";
-// import { Nav2 } from "../components/Nav2";
-// import { Logo } from "../components/Logo";
+import MachineSelect from "../components/MachineSelect";
 import Nav from "../components/Nav";
+import Inventory from "./Inventory";
 import Machines from "./Machines";
 
 const Home = () => {
@@ -11,6 +11,8 @@ const Home = () => {
       <div className="flex-auto">
         <Header />
         <Machines />
+        {/* <Inventory /> */}
+        {/* <MachineSelect /> */}
       </div>
     </div>
   );

@@ -2,12 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const categorySlice = createSlice({
   name: "categories",
-  initialState: [
-    "lockstitch-machine",
-    "overlock",
-    "regula-rechma",
-    "duz-rechma",
-  ],
+  initialState: [],
   reducers: {
     addCategory: (state, action) => {
       return (state = [...state, action.payload]);

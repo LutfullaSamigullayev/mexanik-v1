@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Input, Modal, Table } from "antd";
+import { Button, Form, Input, Modal, Select, Space, Table } from "antd";
 import { Axios } from "../lib/axios";
 import { Controller, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../components/Categories";
 import { Selected } from "../components/Selected";
+import { addCategory } from "../redux/slices/categorySlice";
 
 const Machines = () => {
   // -----------  Data start ------------------
@@ -37,11 +38,23 @@ const Machines = () => {
   // -----------  Modal start ------------------
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const showModal = () => {
     setIsModalOpen(true);
     reset();
   };
+
+  async function getCategories() {
+    const res = await Axios.get("/categories");
+    for (let item of res.data) {
+      dispatch(addCategory(item.category));
+    }
+  }
+
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -115,12 +128,13 @@ const Machines = () => {
   }, [filial, category, line]);
 
   function onsubmit(data) {
+    console.log(data);
     if (editMacine) {
       Axios.patch(`/sewing-machines/${editMacine}`, { ...data })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     } else {
-      Axios.post("/sewing-machines", { ...data })
+      Axios.post("/sewing-machines", { ...data, checked: false })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     }
@@ -150,9 +164,7 @@ const Machines = () => {
     },
     {
       title: "Nomi",
-      render: (item) =>
-        item.category == "lockstitch-machine" ? "Odnosrochka" : item.category,
-      // dataIndex: "category",
+      dataIndex: "category",
     },
     {
       title: "Firma",
@@ -207,6 +219,41 @@ const Machines = () => {
 
   // -----------  Table end ------------------
 
+  // -----------  Modal Select start ------------------
+
+  const [categoriesModal, setCategoriesModal] = useState([]);
+
+  const [modelModal, setModelModal] = useState([]);
+
+  const [filialModal, setFilialModal] = useState([]);
+
+  async function getCategoriesModal() {
+    const res = await Axios.get("/categories");
+    setCategoriesModal(res.data);
+  }
+
+  async function getModelModal() {
+    const res = await Axios.get("/model");
+    setModelModal(res.data);
+  }
+
+  async function getFilialModal() {
+    const res = await Axios.get("/filial");
+    setFilialModal(res.data);
+  }
+
+  useEffect(() => {
+    getCategoriesModal();
+    getModelModal();
+    getFilialModal();
+  }, []);
+
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+
+  // -----------  Modal Select end ------------------
+
   return (
     <>
       <div className=" flex items-center justify-between p-3">
@@ -222,48 +269,134 @@ const Machines = () => {
         onCancel={handleCancel}
         footer={null}
       >
-        <Form onFinish={handleSubmit(onsubmit)}>
+        <Form className="w-96" onFinish={handleSubmit(onsubmit)}>
           <Controller
             control={control}
             name="category"
-            render={({ field }) => <Input placeholder="Nomi" {...field} />}
+            render={({ field }) => (
+              <Space className="flex flex-col items-start">
+                <Select
+                  className="w-96"
+                  placeholder="Nomini tanlang"
+                  // defaultValue="odnosrochka"
+                  onChange={handleChange}
+                  options={categoriesModal.map((i) => ({
+                    label: i.name,
+                    value: i.category,
+                  }))}
+                  {...field}
+                />
+              </Space>
+            )}
           />
+
           <Controller
             control={control}
             name="company"
-            render={({ field }) => <Input placeholder="Firmasi" {...field} />}
+            render={({ field }) => (
+              <Space className="flex flex-col items-start">
+                <Select
+                  className="w-96"
+                  placeholder="Firmasini tanlang"
+                  // defaultValue="Juki"
+                  onChange={handleChange}
+                  options={[
+                    { value: "juki", label: "Juki" },
+                    { value: "siruba", label: "Siruba" },
+                    { value: "yamato", label: "Yamato" },
+                  ]}
+                  {...field}
+                />
+              </Space>
+            )}
           />
+
           <Controller
             control={control}
             name="model"
-            render={({ field }) => <Input placeholder="Modeli" {...field} />}
+            render={({ field }) => (
+              <Space className="flex flex-col items-start">
+                <Select
+                  className="w-96"
+                  placeholder="Modelini tanlang"
+                  // defaultValue="model"
+                  onChange={handleChange}
+                  options={modelModal.map((i) => ({
+                    label: i.model,
+                    value: i.model,
+                  }))}
+                  {...field}
+                />
+              </Space>
+            )}
           />
 
           <Controller
             control={control}
             name="location"
-            render={({ field }) => <Input placeholder="Filial" {...field} />}
+            render={({ field }) => (
+              <Space className="flex flex-col items-start">
+                <Select
+                  className="w-96"
+                  placeholder="Filialni tanlang"
+                  // defaultValue="Shovot"
+                  onChange={handleChange}
+                  options={filialModal.map((i) => ({
+                    label: i.name,
+                    value: i.filial,
+                  }))}
+                  {...field}
+                />
+              </Space>
+            )}
           />
+
           <Controller
             control={control}
             name="line"
-            render={({ field }) => <Input placeholder="Liniyasi" {...field} />}
+            render={({ field }) => (
+              <Space className="flex flex-col items-start">
+                <Select
+                  placeholder="Liniyani tanlang"
+                  className="w-96"
+                  // defaultValue="0"
+                  onChange={handleChange}
+                  options={[...Array(18).keys()].map((i) => ({
+                    label: `line-${i}`,
+                    value: i,
+                  }))}
+                  {...field}
+                />
+              </Space>
+            )}
           />
+
           <Controller
+            className="w-96"
             control={control}
             name="serialNumber"
             render={({ field }) => (
-              <Input placeholder="Seria raqami" {...field} />
+              <Input
+                className="w-96"
+                placeholder="Seria raqamini kiriting"
+                {...field}
+              />
             )}
           />
           <Controller
             control={control}
             name="inventoryNumber"
             render={({ field }) => (
-              <Input placeholder="Inventar raqami" {...field} />
+              <Input
+                className="w-96"
+                placeholder="Inventar raqamini kiriting"
+                {...field}
+              />
             )}
           />
-          <Button htmlType="submit">Submit</Button>
+          <Button htmlType="submit" type="primary">
+            Qo'shish
+          </Button>
         </Form>
       </Modal>
       <Table
