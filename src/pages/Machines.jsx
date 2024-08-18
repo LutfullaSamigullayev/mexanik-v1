@@ -180,7 +180,13 @@ const Machines = () => {
     },
     {
       title: "Liniya",
-      dataIndex: "line",
+      // dataIndex: "line",
+      render: (item) =>
+        item.line == 0
+          ? "Xonada"
+          : item.line == 17
+          ? "Chetda"
+          : `${item.line} - liniya`,
     },
     {
       title: "Seria raqami",
@@ -240,7 +246,7 @@ const Machines = () => {
   for (let i = 1; i <= 16; i++) {
     lineModal.push({
       value: i,
-      label: `${i}-liniya`,
+      label: `${i} - liniya`,
     });
   }
 

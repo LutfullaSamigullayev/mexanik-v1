@@ -14,7 +14,7 @@ const options = [
 for (let i = 1; i <= 16; i++) {
   options.push({
     value: i,
-    label: `${i}-liniya`,
+    label: `${i} - liniya`,
   });
 }
 
