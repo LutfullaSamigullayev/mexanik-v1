@@ -209,9 +209,9 @@ const Machines = () => {
               setValue("inventoryNumber", item.inventoryNumber);
             }}
           >
-            edit
+            Tahrirlash
           </Button>
-          <Button onClick={() => setDeleteMacine(item.id)}>delete</Button>
+          <Button onClick={() => setDeleteMacine(item.id)}>O'chirish</Button>
         </>
       ),
     },
@@ -413,7 +413,12 @@ const Machines = () => {
         columns={columns}
       />
       <Modal
+        // className=""
+        width={200}
+        centered={true}
         open={deleteMacine}
+        okText="Ha"
+        cancelText="Yo'q"
         onOk={onDeleteMachine}
         onCancel={() => {
           setDeleteMacine(null);

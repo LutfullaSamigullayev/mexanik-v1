@@ -32,7 +32,7 @@ export function Selected() {
         style={{
           width: "100%",
         }}
-        placeholder="Tags Mode"
+        placeholder="Liniyani belgilang"
         onChange={handleChange}
         options={options}
       />
