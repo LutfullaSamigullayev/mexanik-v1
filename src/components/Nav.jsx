@@ -6,6 +6,7 @@ import {
 import { Menu } from "antd";
 import { useDispatch } from "react-redux";
 import { setFilial } from "../redux/slices/machineSlice";
+import { Logo } from "./Logo";
 
 const Nav4 = () => {
   const dispatch = useDispatch();
@@ -102,16 +103,19 @@ const Nav4 = () => {
     // dispatch(setFilial(e.key));
   };
   return (
-    <Menu
-      onClick={onClick}
-      style={{
-        width: 200,
-      }}
-      defaultSelectedKeys={["kat-qala"]}
-      defaultOpenKeys={["filial"]}
-      mode="inline"
-      items={items}
-    />
+    <div className="flex flex-col items-center">
+      <Logo />
+      <Menu
+        onClick={onClick}
+        style={{
+          width: 200,
+        }}
+        defaultSelectedKeys={["kat-qala"]}
+        defaultOpenKeys={["filial"]}
+        mode="inline"
+        items={items}
+      />
+    </div>
   );
 };
 export default Nav4;
