@@ -4,7 +4,7 @@ import { setLine } from "../redux/slices/lineSlice";
 const options = [
   {
     value: 0,
-    label: "Xona",
+    label: "Xonada",
   },
   {
     value: 17,
@@ -14,7 +14,7 @@ const options = [
 for (let i = 1; i <= 16; i++) {
   options.push({
     value: i,
-    label: `line-${i}`,
+    label: `${i}-liniya`,
   });
 }
 

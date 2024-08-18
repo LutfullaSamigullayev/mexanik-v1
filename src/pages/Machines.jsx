@@ -227,6 +227,23 @@ const Machines = () => {
 
   const [filialModal, setFilialModal] = useState([]);
 
+  const lineModal = [
+    {
+      value: 0,
+      label: "Xonada",
+    },
+    {
+      value: 17,
+      label: "Chetda",
+    },
+  ];
+  for (let i = 1; i <= 16; i++) {
+    lineModal.push({
+      value: i,
+      label: `${i}-liniya`,
+    });
+  }
+
   async function getCategoriesModal() {
     const res = await Axios.get("/categories");
     setCategoriesModal(res.data);
@@ -361,10 +378,11 @@ const Machines = () => {
                   className="w-96"
                   // defaultValue="0"
                   onChange={handleChange}
-                  options={[...Array(18).keys()].map((i) => ({
-                    label: `line-${i}`,
-                    value: i,
-                  }))}
+                  // options={[...Array(18).keys()].map((i) => ({
+                  //   label: `${i}-liniya`,
+                  //   value: i,
+                  // }))}
+                  options={lineModal}
                   {...field}
                 />
               </Space>
