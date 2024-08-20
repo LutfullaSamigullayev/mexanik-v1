@@ -1,3 +1,4 @@
+import { Outlet, Route } from "react-router-dom";
 import { Header } from "../components/Header";
 import MachineSelect from "../components/MachineSelect";
 import Nav from "../components/Nav";
@@ -10,7 +11,8 @@ const Home = () => {
       <Nav />
       <div className="flex-auto">
         <Header />
-        <Machines />
+        <Outlet />
+        {/* <Machines /> */}
         {/* <Inventory /> */}
         {/* <MachineSelect /> */}
       </div>

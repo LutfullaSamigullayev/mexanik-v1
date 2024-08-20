@@ -7,9 +7,12 @@ import { Menu } from "antd";
 import { useDispatch } from "react-redux";
 import { setFilial } from "../redux/slices/machineSlice";
 import { Logo } from "./Logo";
+import { Link, useLocation } from "react-router-dom";
 
 const Nav4 = () => {
   const dispatch = useDispatch();
+
+  const location = useLocation();
 
   const items = [
     {
@@ -19,20 +22,17 @@ const Nav4 = () => {
       children: [
         {
           key: "kat-qala",
-          label: "Kat qal'a",
-          value: "kat-qala",
-
-          // label: <Link to={"/"}>Hammasi</Link>,
+          label: <Link to={"/"}>Kat qal'a</Link>,
           onClick: () => dispatch(setFilial("kat-qala")),
         },
         {
           key: "shovot",
-          label: "Shovot",
+          label: <Link to={"/"}>Shovot</Link>,
           onClick: () => dispatch(setFilial("shovot")),
         },
         {
           key: "urganch",
-          label: "Urganch",
+          label: <Link to={"/"}>Urganch</Link>,
           onClick: () => dispatch(setFilial("urganch")),
         },
       ],
@@ -45,17 +45,17 @@ const Nav4 = () => {
       children: [
         {
           key: "inventory-kat-qala",
-          label: "Kat qal'a",
+          label: <Link to={"/inventory"}>Kat qal'a</Link>,
           onClick: () => dispatch(setFilial("kat-qala")),
         },
         {
           key: "inventory-shovot",
-          label: "Shovot",
+          label: <Link to={"/inventory"}>Shovot</Link>,
           onClick: () => dispatch(setFilial("shovot")),
         },
         {
           key: "inventory-urganch",
-          label: "Urganch",
+          label: <Link to={"/inventory"}>Urganch</Link>,
           onClick: () => dispatch(setFilial("urganch")),
         },
       ],
@@ -64,21 +64,24 @@ const Nav4 = () => {
     //   type: "divider",
     // },
     {
-      key: "mehaniklar",
+      key: "mexaniklar",
       label: "Mexaniklar",
       icon: <ContainerOutlined />,
       children: [
         {
-          key: "mehanik-kat-qala",
-          label: "Kat-qala",
+          key: "mexanik-kat-qala",
+          label: <Link to={"/mexanik"}>Urganch</Link>,
+          onClick: () => dispatch(setFilial("kat-qala")),
         },
         {
-          key: "mehanik-shovot",
-          label: "Shovot",
+          key: "mexanik-shovot",
+          label: <Link to={"/mexanik"}>Urganch</Link>,
+          onClick: () => dispatch(setFilial("shovot")),
         },
         {
-          key: "mehanik-urganch",
-          label: "Urganch",
+          key: "mexanik-urganch",
+          label: <Link to={"/mexanik"}>Urganch</Link>,
+          onClick: () => dispatch(setFilial("urganch")),
         },
       ],
     },
@@ -110,8 +113,14 @@ const Nav4 = () => {
         style={{
           width: 200,
         }}
-        defaultSelectedKeys={["kat-qala"]}
-        defaultOpenKeys={["filial"]}
+        defaultSelectedKeys={[
+          `${
+            location.pathname.slice(1) + (location.pathname === "/" ? "" : "-")
+          }kat-qala`,
+        ]}
+        defaultOpenKeys={[
+          location.pathname === "/" ? "filial" : location.pathname.slice(1),
+        ]}
         mode="inline"
         items={items}
       />
