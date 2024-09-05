@@ -16,7 +16,7 @@ export function Header() {
       />
       <div className="flex items-center gap-x-4">
         <Icons.bell />
-        <Icons.massage />
+        {/* <Icons.massage />   */} {/* keyinroq duzaman firebase bilan */}
         <div className="flex gap-x-2">
           <img src="/userImage.png" alt="userImage" className="size-11" />
           <div>

@@ -92,7 +92,7 @@ const Inventory = () => {
 
   // -----------  Select end ------------------
 
-  // -----------  Select 1 start ------------------
+  // -----------  Select 2 start ------------------
 
   const sortId = (array, select) => {
     const newarr = [];
@@ -129,6 +129,10 @@ const Inventory = () => {
   }
 
   // -----------  Select 2 end ------------------
+
+  // -----------  Column start ------------------
+
+  // -----------  Column end ------------------
 
   return (
     <>

@@ -9,39 +9,52 @@ import SignUp from "./pages/SignUp";
 export const routes = {
   public: [
     {
+      id: 1,
       path: "/login",
       element: <Login />,
     },
     {
+      id: 2,
       path: "/signUp",
       element: <SignUp />,
     },
     {
+      id: 3,
       path: "/logOut",
       element: <LogOut />,
     },
   ],
   private: [
     {
+      id: 4,
       path: "/",
       element: <Home />,
-      allowedRoles: ["admin"],
+      // allowedRoles: ["admin"],
+      // allowedRoles: ["admin", "kat-qala", "shovot", "urganch"],
       children: [
         {
+          id: 5,
           path: "/",
           element: <Machines />,
+          allowedRoles: ["admin", "kat-qala", "shovot", "urganch"],
         },
         {
+          id: 6,
           path: "/machines",
           element: <Machines />,
+          allowedRoles: ["admin", "kat-qala", "shovot", "urganch"],
         },
         {
+          id: 7,
           path: "/inventory",
           element: <Inventory />,
+          allowedRoles: ["admin"],
         },
         {
+          id: 8,
           path: "/mexanik",
           element: <Mexanik />,
+          allowedRoles: ["admin"],
         },
       ],
     },

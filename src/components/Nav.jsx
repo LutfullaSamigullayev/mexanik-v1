@@ -14,6 +14,99 @@ const Nav4 = () => {
 
   const location = useLocation();
 
+  // const navLinks = {
+  //   admin: [
+  //     {
+  //       key: "filial",
+  //       label: "Filiallar",
+  //       icon: <GlobalOutlined />,
+  //       children: [
+  //         {
+  //           key: "kat-qala",
+  //           label: <Link to={"/"}>Kat qal'a</Link>,
+  //           onClick: () => dispatch(setFilial("kat-qala")),
+  //         },
+  //         {
+  //           key: "shovot",
+  //           label: <Link to={"/"}>Shovot</Link>,
+  //           onClick: () => dispatch(setFilial("shovot")),
+  //         },
+  //         {
+  //           key: "urganch",
+  //           label: <Link to={"/"}>Urganch</Link>,
+  //           onClick: () => dispatch(setFilial("urganch")),
+  //         },
+  //       ],
+  //     },
+
+  //     {
+  //       key: "inventory",
+  //       label: "Inventarizatsiya",
+  //       icon: <CheckSquareOutlined />,
+  //       children: [
+  //         {
+  //           key: "inventory-kat-qala",
+  //           label: <Link to={"/inventory"}>Kat qal'a</Link>,
+  //           onClick: () => dispatch(setFilial("kat-qala")),
+  //         },
+  //         {
+  //           key: "inventory-shovot",
+  //           label: <Link to={"/inventory"}>Shovot</Link>,
+  //           onClick: () => dispatch(setFilial("shovot")),
+  //         },
+  //         {
+  //           key: "inventory-urganch",
+  //           label: <Link to={"/inventory"}>Urganch</Link>,
+  //           onClick: () => dispatch(setFilial("urganch")),
+  //         },
+  //       ],
+  //     },
+  //     // {
+  //     //   type: "divider",
+  //     // },
+  //     {
+  //       key: "mexanik",
+  //       label: "Mexaniklar",
+  //       icon: <ContainerOutlined />,
+  //       children: [
+  //         {
+  //           key: "mexanik-kat-qala",
+  //           label: <Link to={"/mexanik"}>Kat qal'a</Link>,
+  //           onClick: () => dispatch(setFilial("kat-qala")),
+  //         },
+  //         {
+  //           key: "mexanik-shovot",
+  //           label: <Link to={"/mexanik"}>Shovot</Link>,
+  //           onClick: () => dispatch(setFilial("shovot")),
+  //         },
+  //         {
+  //           key: "mexanik-urganch",
+  //           label: <Link to={"/mexanik"}>Urganch</Link>,
+  //           onClick: () => dispatch(setFilial("urganch")),
+  //         },
+  //       ],
+  //     },
+  //     // {
+  //     //   key: "grp",
+  //     //   label: "Uztex Group",
+  //     //   type: "group",
+  //     //   children: [
+  //     //     {
+  //     //       key: "about",
+  //     //       label: "About",
+  //     //     },
+  //     //     {
+  //     //       key: "contact",
+  //     //       label: "Contact",
+  //     //     },
+  //     //   ],
+  //     // },
+  //   ],
+  //   subadmin: []
+  // }
+
+  // const items = navLinks[role]
+
   const items = [
     {
       key: "filial",
@@ -64,18 +157,18 @@ const Nav4 = () => {
     //   type: "divider",
     // },
     {
-      key: "mexaniklar",
+      key: "mexanik",
       label: "Mexaniklar",
       icon: <ContainerOutlined />,
       children: [
         {
           key: "mexanik-kat-qala",
-          label: <Link to={"/mexanik"}>Urganch</Link>,
+          label: <Link to={"/mexanik"}>Kat qal'a</Link>,
           onClick: () => dispatch(setFilial("kat-qala")),
         },
         {
           key: "mexanik-shovot",
-          label: <Link to={"/mexanik"}>Urganch</Link>,
+          label: <Link to={"/mexanik"}>Shovot</Link>,
           onClick: () => dispatch(setFilial("shovot")),
         },
         {

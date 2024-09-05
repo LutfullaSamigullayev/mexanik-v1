@@ -2,10 +2,42 @@ import { Logo } from "../components/Logo";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Icons } from "../components/icons";
+import { Axios } from "../lib/axios";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth } from "../redux/slices/authSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../utils/login";
 
 const Login = () => {
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onFinish = async (values) => {
+    const { data: user } = await Axios.get(
+      `/users?login=${values.login}&parol=${values.password}`
+    );
+
+    // const isDataCorrect = users.find((user) => {
+    //   return user.login === values.login && user.parol === values.password;
+    // });
+
+    let isDataCorrect = !!user.length;
+
+    console.log(isDataCorrect);
+
+    if (isDataCorrect) {
+      dispatch(setAuth(user));
+
+      localStorage.setItem("login", user[0].login);
+      // localStorage.setItem("parol", user[0].parol);
+      localStorage.setItem("role", user[0].role);
+      // localStorage.setItem("location", user[0].location);
+
+      return navigate("/");
+    }
+
+    console.log("Error");
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -17,7 +49,9 @@ const Login = () => {
         <Logo />
         <div className="flex flex-col gap-y-3 items-center">
           <h1 className="text-3xl font-semibold">Kirish</h1>
-          <p className="text-sm text-gray-400">Kirish uchun login va parolni kiriting!</p>
+          <p className="text-sm text-gray-400">
+            Kirish uchun login va parolni kiriting!
+          </p>
         </div>
 
         <Form
@@ -29,17 +63,17 @@ const Login = () => {
           onFinish={onFinish}
         >
           <Form.Item
-            name="email"
+            name="login"
             rules={[
               {
                 required: true,
-                message: "Iltimos E-mail pochtangizni kiriting!",
+                message: "Iltimos Loginingizni kiriting!",
               },
             ]}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
+              placeholder="Login"
             />
           </Form.Item>
           <Form.Item
@@ -54,7 +88,7 @@ const Login = () => {
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
-              placeholder="Password"
+              placeholder="Parol"
             />
           </Form.Item>
           {/* <Form.Item>
@@ -67,14 +101,9 @@ const Login = () => {
             </a>
           </Form.Item> */}
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-end">
             <Button type="primary" htmlType="submit" className="w-fit">
               Kirish
-            </Button>
-
-            <Button className="w-fit">
-              <Icons.google />
-              Google hisob orqali kirish
             </Button>
           </div>
         </Form>

@@ -12,8 +12,9 @@ const Machines = () => {
 
   const [sewingMachines, setSewingMachines] = useState([]);
 
-  const [deleteMacine, setDeleteMacine] = useState(null);
-  const [editMacine, setEditMacine] = useState(null);
+  const [deleteMacine, setDeleteMachine] = useState(null);
+  const [editMacine, setEditMachine] = useState(null);
+  const [transferMachine, setTransferMachine] = useState(null);
 
   // -----------  Data end ------------------
 
@@ -58,6 +59,7 @@ const Machines = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setEditMachine(null);
   };
 
   // -----------  Modal end ------------------
@@ -140,7 +142,7 @@ const Machines = () => {
     }
     reset();
     handleCancel(false);
-    setEditMacine(null);
+    setEditMachine(null);
     getMacines();
   }
 
@@ -149,8 +151,19 @@ const Machines = () => {
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
 
-    setDeleteMacine(null);
+    reset();
+    setDeleteMachine(null);
     getMacines();
+  }
+
+  function onTransferMachine(data) {
+    Axios.patch(`sewing-machines/${transferMachine}`, { ...data })
+      .then((res) => console.log(res))
+      .then((err) => console.log(err));
+
+    setTransferMachine(null);
+    getMacines();
+    console.log(transferMachine);
   }
 
   // -----------  Axios end ------------------
@@ -203,21 +216,29 @@ const Machines = () => {
         <>
           <Button
             onClick={() => {
-              setEditMacine(item.id);
+              setTransferMachine(item.id);
+              // setIsModalOpen(true);
+              setValue("line", item.line);
+            }}
+          >
+            Jo'natish
+          </Button>
+          <Button
+            onClick={() => {
+              setEditMachine(item.id);
               setIsModalOpen(true);
               setValue("category", item.category);
               setValue("company", item.company);
               setValue("model", item.model);
-              setValue("needles", item.needles);
-              setValue("line", item.line);
               setValue("location", item.location);
+              setValue("line", item.line);
               setValue("serialNumber", item.serialNumber);
               setValue("inventoryNumber", item.inventoryNumber);
             }}
           >
             Tahrirlash
           </Button>
-          <Button onClick={() => setDeleteMacine(item.id)}>O'chirish</Button>
+          <Button onClick={() => setDeleteMachine(item.id)}>O'chirish</Button>
         </>
       ),
     },
@@ -287,31 +308,33 @@ const Machines = () => {
         </Button>
       </div>
       <Modal
-        title="Mashina qo'shish"
+        title={editMacine ? "Tahrirlash" : "Mashina qo'shish"}
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
       >
         <Form className="w-96" onFinish={handleSubmit(onsubmit)}>
-          <Controller
-            control={control}
-            name="category"
-            render={({ field }) => (
-              <Space className="flex flex-col items-start">
-                <Select
-                  className="w-96"
-                  placeholder="Nomini tanlang"
-                  // defaultValue="odnosrochka"
-                  onChange={handleChange}
-                  options={categoriesModal.map((i) => ({
-                    label: i.name,
-                    value: i.category,
-                  }))}
-                  {...field}
-                />
-              </Space>
-            )}
-          />
+          {transferMachine ? null : (
+            <Controller
+              control={control}
+              name="category"
+              render={({ field }) => (
+                <Space className="flex flex-col items-start">
+                  <Select
+                    className="w-96"
+                    placeholder="Nomini tanlang"
+                    // defaultValue="odnosrochka"
+                    onChange={handleChange}
+                    options={categoriesModal.map((i) => ({
+                      label: i.name,
+                      value: i.category,
+                    }))}
+                    {...field}
+                  />
+                </Space>
+              )}
+            />
+          )}
 
           <Controller
             control={control}
@@ -433,7 +456,7 @@ const Machines = () => {
           },
           showSizeChanger: true,
         }}
-        dataSource={sewingMachines}
+        dataSource={sewingMachines.map((item) => ({ ...item, key: item.id }))}
         columns={columns}
       />
       <Modal
@@ -445,10 +468,65 @@ const Machines = () => {
         cancelText="Yo'q"
         onOk={onDeleteMachine}
         onCancel={() => {
-          setDeleteMacine(null);
+          setDeleteMachine(null);
         }}
       >
         O'chirilsinmi?
+      </Modal>
+      <Modal
+        title="Jo'natish"
+        width={200}
+        centered={true}
+        open={transferMachine}
+        okText="Jo'natish"
+        cancelText="Bekor qilish"
+        onOk={onTransferMachine}
+        onCancel={() => {
+          setTransferMachine(null);
+        }}
+      >
+        <Form className="w-96" onFinish={handleSubmit(onsubmit)}>
+          <Controller
+            control={control}
+            name="location"
+            render={({ field }) => (
+              <Space className="flex flex-col items-start">
+                <Select
+                  className="w-96"
+                  placeholder="Filialni tanlang"
+                  // defaultValue="Shovot"
+                  onChange={handleChange}
+                  options={filialModal.map((i) => ({
+                    label: i.name,
+                    value: i.filial,
+                  }))}
+                  {...field}
+                />
+              </Space>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="line"
+            render={({ field }) => (
+              <Space className="flex flex-col items-start">
+                <Select
+                  placeholder="Liniyani tanlang"
+                  className="w-96"
+                  // defaultValue="0"
+                  onChange={handleChange}
+                  // options={[...Array(18).keys()].map((i) => ({
+                  //   label: `${i}-liniya`,
+                  //   value: i,
+                  // }))}
+                  options={lineModal}
+                  {...field}
+                />
+              </Space>
+            )}
+          />
+        </Form>
       </Modal>
     </>
   );
