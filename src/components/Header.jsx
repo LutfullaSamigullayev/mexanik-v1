@@ -1,11 +1,21 @@
-import { Input } from "antd";
+import { Button, Input } from "antd";
 import { Icons } from "./icons";
+import { LogoutOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+
 const { Search } = Input;
 const onSearch = (value, _e, info) => console.log(info?.source, value);
 
 export function Header() {
   const fullName = localStorage.getItem("name");
   const role = localStorage.getItem("role");
+
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.clear();
+    return navigate("/login");
+  };
 
   return (
     <div className="flex items-center justify-between max-h-[77px] px-8 py-3 border-b">
@@ -27,6 +37,9 @@ export function Header() {
             <p className="text-slate-500">{role}</p>
           </div>
         </div>
+        <Button onClick={logout} type="primary">
+          <LogoutOutlined />
+        </Button>
       </div>
     </div>
   );

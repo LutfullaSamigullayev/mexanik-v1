@@ -33,7 +33,7 @@ const Login = () => {
       return navigate("/");
     }
 
-    console.log("Error");
+    // console.log("Error");
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -57,6 +57,7 @@ const Login = () => {
             remember: true,
           }}
           onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
           <Form.Item
             name="login"
