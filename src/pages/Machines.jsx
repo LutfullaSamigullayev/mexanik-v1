@@ -143,7 +143,9 @@ const Machines = () => {
   }
 
   useEffect(() => {
-    dispatch(setFilial(location2 == "admin" ? "katqala" : location2));
+    dispatch(
+      setFilial(filial ? filial : location2 == "admin" ? "katqala" : location2)
+    );
     getMacines();
   }, [location2, filial, category, line]);
 
