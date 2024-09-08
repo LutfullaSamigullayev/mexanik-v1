@@ -18,10 +18,6 @@ const Login = () => {
       `/users?login=${values.login}&parol=${values.password}`
     );
 
-    // const isDataCorrect = users.find((user) => {
-    //   return user.login === values.login && user.parol === values.password;
-    // });
-
     let isDataCorrect = !!user.length;
 
     console.log(isDataCorrect);
@@ -30,9 +26,9 @@ const Login = () => {
       dispatch(setAuth(user));
 
       localStorage.setItem("login", user[0].login);
-      // localStorage.setItem("parol", user[0].parol);
+      localStorage.setItem("name", user[0].name);
       localStorage.setItem("role", user[0].role);
-      // localStorage.setItem("location", user[0].location);
+      localStorage.setItem("location", user[0].location);
 
       return navigate("/");
     }

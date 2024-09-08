@@ -26,7 +26,7 @@ export function Selected() {
   };
 
   return (
-    <div className="w-[400px]">
+    <div className="w-[300px]">
       <Select
         mode="tags"
         style={{

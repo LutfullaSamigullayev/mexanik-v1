@@ -6,6 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Categories } from "../components/Categories";
 import { Selected } from "../components/Selected";
 import { addCategory } from "../redux/slices/categorySlice";
+import {
+  ExportOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
+import { setFilial } from "../redux/slices/machineSlice";
 
 const Machines = () => {
   // -----------  Data start ------------------
@@ -22,11 +29,21 @@ const Machines = () => {
 
   const filial = useSelector((state) => state.filial);
 
+  console.log(filial);
+
   const category = useSelector((state) => state.category);
 
   const line = useSelector((state) => state.line);
 
   // -----------  Redux end ------------------
+
+  // -----------  Localstorage start ------------------
+
+  const location2 = localStorage.getItem("location");
+
+  const role = localStorage.getItem("role");
+
+  // -----------  Localstorage end ------------------
 
   // -----------  Table Page start ------------------
 
@@ -126,8 +143,9 @@ const Machines = () => {
   }
 
   useEffect(() => {
+    dispatch(setFilial(location2 == "admin" ? "katqala" : location2));
     getMacines();
-  }, [filial, category, line]);
+  }, [location2, filial, category, line]);
 
   function onsubmit(data) {
     console.log(data);
@@ -187,10 +205,10 @@ const Machines = () => {
       title: "Modeli",
       dataIndex: "model",
     },
-    {
-      title: "Filial",
-      dataIndex: "location",
-    },
+    // {
+    //   title: "Filial",
+    //   dataIndex: "location",
+    // },
     {
       title: "Liniya",
       // dataIndex: "line",
@@ -206,42 +224,55 @@ const Machines = () => {
       dataIndex: "serialNumber",
     },
     {
-      title: "Inventar №",
+      title: "Inv №",
       // render: (item) => `${String(item.inventory - number).padStart(8, "0")}`,
       dataIndex: "inventoryNumber",
     },
-    {
-      title: "Action",
-      render: (item) => (
-        <>
-          <Button
-            onClick={() => {
-              setTransferMachine(item.id);
-              // setIsModalOpen(true);
-              setValue("line", item.line);
-            }}
-          >
-            Jo'natish
-          </Button>
-          <Button
-            onClick={() => {
-              setEditMachine(item.id);
-              setIsModalOpen(true);
-              setValue("category", item.category);
-              setValue("company", item.company);
-              setValue("model", item.model);
-              setValue("location", item.location);
-              setValue("line", item.line);
-              setValue("serialNumber", item.serialNumber);
-              setValue("inventoryNumber", item.inventoryNumber);
-            }}
-          >
-            Tahrirlash
-          </Button>
-          <Button onClick={() => setDeleteMachine(item.id)}>O'chirish</Button>
-        </>
-      ),
-    },
+    role == "admin"
+      ? {
+          title: "Action",
+          render: (item) => (
+            <>
+              <Button
+                className="mx-1 rounded-full"
+                type="primary"
+                onClick={() => {
+                  setTransferMachine(item.id);
+                  // setIsModalOpen(true);
+                  setValue("line", item.line);
+                }}
+              >
+                <ExportOutlined />
+              </Button>
+              <Button
+                className="mx-1 rounded-full"
+                type="primary"
+                onClick={() => {
+                  setEditMachine(item.id);
+                  setIsModalOpen(true);
+                  setValue("category", item.category);
+                  setValue("company", item.company);
+                  setValue("model", item.model);
+                  setValue("location", item.location);
+                  setValue("line", item.line);
+                  setValue("serialNumber", item.serialNumber);
+                  setValue("inventoryNumber", item.inventoryNumber);
+                }}
+              >
+                <EditOutlined />
+              </Button>
+
+              <Button
+                className="mx-1 rounded-full"
+                type="primary"
+                onClick={() => setDeleteMachine(item.id)}
+              >
+                <DeleteOutlined />
+              </Button>
+            </>
+          ),
+        }
+      : {},
   ];
 
   // -----------  Table end ------------------
@@ -303,9 +334,11 @@ const Machines = () => {
       <div className=" flex items-center justify-between p-3">
         <Categories />
         <Selected />
-        <Button type="primary" onClick={showModal}>
-          Mashina qo'shish
-        </Button>
+        {role == "admin" ? (
+          <Button className="rounded-full" type="primary" onClick={showModal}>
+            <PlusCircleOutlined />
+          </Button>
+        ) : null}
       </div>
       <Modal
         title={editMacine ? "Tahrirlash" : "Mashina qo'shish"}

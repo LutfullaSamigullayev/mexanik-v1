@@ -34,18 +34,17 @@ export function Categories() {
 
   return (
     <div className="w-fit ">
-      <Space direction="horizontal" className="flex gap-x-6">
+      <Space direction="horizontal" className="flex gap-x-2">
         {categories.map((item) => (
           <div key={item.id} className="w-fit flex gap-x-1 items-center">
-            {item.name}
             <Switch
               onChange={(checked) =>
                 checked
                   ? dispatch(addCategory(item.category))
                   : dispatch(delCategory(item.category))
               }
-              checkedChildren={<CheckOutlined />}
-              unCheckedChildren={<CloseOutlined />}
+              checkedChildren={item.name}
+              unCheckedChildren={item.name}
               defaultChecked
             ></Switch>
           </div>

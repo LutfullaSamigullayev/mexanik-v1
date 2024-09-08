@@ -1,43 +1,53 @@
 import { useEffect, useState } from "react";
-import { Button, Flex, Table } from "antd";
+import { Button, Checkbox, Divider, Flex, Table } from "antd";
 import { useSelector } from "react-redux";
 import { Axios } from "../lib/axios";
+import { ClearOutlined } from "@ant-design/icons";
 
 const columns = [
   {
     title: "№",
     render: (value, item, index) => index + 1,
+    key: "1",
   },
   {
     title: "Nomi",
     dataIndex: "category",
+    key: "2",
   },
   {
     title: "Firma",
     dataIndex: "company",
+    key: "3",
   },
   {
     title: "Modeli",
     dataIndex: "model",
+    key: "4",
   },
-  {
-    title: "Filial",
-    dataIndex: "location",
-  },
+  // {
+  //   title: "Filial",
+  //   dataIndex: "location",
+  //   key: "5",
+  // },
   {
     title: "Liniya",
     dataIndex: "line",
+    key: "6",
   },
   {
     title: "Seria raqami",
     dataIndex: "serialNumber",
+    key: "7",
   },
   {
-    title: "Inventar №",
+    title: "Inv №",
     // render: (item) => `${String(item.inventory - number).padStart(8, "0")}`,
     dataIndex: "inventoryNumber",
+    key: "8",
   },
 ];
+const defaultCheckedList = columns.map((item) => item.key);
 
 const Inventory = () => {
   // -----------  Data start ------------------
@@ -132,6 +142,16 @@ const Inventory = () => {
 
   // -----------  Column start ------------------
 
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+  const newColumns = columns.map((item) => ({
+    ...item,
+    hidden: !checkedList.includes(item.key),
+  }));
+
   // -----------  Column end ------------------
 
   return (
@@ -161,18 +181,30 @@ const Inventory = () => {
       <Flex gap="middle" vertical>
         <Flex align="center" gap="middle">
           <Button
+            className="rounded-full"
             type="primary"
             onClick={start}
             disabled={!hasSelected}
             loading={loading}
           >
-            Reload
+            <ClearOutlined />
           </Button>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : null}
+          {hasSelected ? `${selectedRowKeys.length} ta belgilandi` : null}
         </Flex>
+
+        <Divider>Inventarizatsiya</Divider>
+
+        <Checkbox.Group
+          value={checkedList}
+          options={options}
+          onChange={(value) => {
+            setCheckedList(value);
+          }}
+        />
+
         <Table
           rowSelection={rowSelection}
-          columns={columns}
+          columns={newColumns}
           dataSource={sewingMachines.map((item) => ({ ...item, key: item.id }))}
         />
       </Flex>

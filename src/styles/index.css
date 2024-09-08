@@ -16,3 +16,6 @@ body {
 .ant-modal-content {
     width: fit-content;
 }
+.ant-table-cell {
+     padding: 2px 0 !important;
+}
