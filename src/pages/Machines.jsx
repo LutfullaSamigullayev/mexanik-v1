@@ -59,8 +59,8 @@ const Machines = () => {
   const dispatch = useDispatch();
 
   const showModal = () => {
-    setIsModalOpen(true);
     reset();
+    setIsModalOpen(true);
   };
 
   async function getCategories() {
@@ -75,6 +75,8 @@ const Machines = () => {
   }, []);
 
   const handleCancel = () => {
+    reset();
+    setTransferMachine(null);
     setIsModalOpen(false);
     setEditMachine(null);
   };
@@ -137,7 +139,7 @@ const Machines = () => {
         }
       }
 
-      const res = await Axios.get();
+      const res = await Axios.get(url);
       setSewingMachines(res.data);
     }
   }
@@ -153,6 +155,14 @@ const Machines = () => {
     console.log(data);
     if (editMacine) {
       Axios.patch(`/sewing-machines/${editMacine}`, { ...data })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    } else if (transferMachine) {
+      Axios.patch(`/sewing-machines/${transferMachine}`, {
+        ...data,
+        to: data.location,
+        location: "transfer",
+      })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     } else {
@@ -240,11 +250,15 @@ const Machines = () => {
                 type="primary"
                 onClick={() => {
                   setTransferMachine(item.id);
-                  // setIsModalOpen(true);
-                  setValue("line", item.line);
+                  setIsModalOpen(true);
+                  setValue("location", item.location);
+                  setValue("from", filial);
+                  setValue("to", item.location);
+                  console.log(item.location);
                 }}
               >
                 <ExportOutlined />
+                Jo'natish
               </Button>
               <Button
                 className="mx-1 rounded-full"
@@ -342,8 +356,17 @@ const Machines = () => {
           </Button>
         ) : null}
       </div>
+      {/*------------------- O'zgartirish modal --------------------- */}
+
       <Modal
-        title={editMacine ? "Tahrirlash" : "Mashina qo'shish"}
+        title={
+          editMacine
+            ? "Tahrirlash"
+            : transferMachine
+            ? `Jo'natish`
+            : "Mashina qo'shish"
+        }
+        // reset
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
@@ -371,46 +394,50 @@ const Machines = () => {
             />
           )}
 
-          <Controller
-            control={control}
-            name="company"
-            render={({ field }) => (
-              <Space className="flex flex-col items-start">
-                <Select
-                  className="w-96"
-                  placeholder="Firmasini tanlang"
-                  // defaultValue="Juki"
-                  onChange={handleChange}
-                  options={[
-                    { value: "juki", label: "Juki" },
-                    { value: "siruba", label: "Siruba" },
-                    { value: "yamato", label: "Yamato" },
-                  ]}
-                  {...field}
-                />
-              </Space>
-            )}
-          />
+          {transferMachine ? null : (
+            <Controller
+              control={control}
+              name="company"
+              render={({ field }) => (
+                <Space className="flex flex-col items-start">
+                  <Select
+                    className="w-96"
+                    placeholder="Firmasini tanlang"
+                    // defaultValue="Juki"
+                    onChange={handleChange}
+                    options={[
+                      { value: "juki", label: "Juki" },
+                      { value: "siruba", label: "Siruba" },
+                      { value: "yamato", label: "Yamato" },
+                    ]}
+                    {...field}
+                  />
+                </Space>
+              )}
+            />
+          )}
 
-          <Controller
-            control={control}
-            name="model"
-            render={({ field }) => (
-              <Space className="flex flex-col items-start">
-                <Select
-                  className="w-96"
-                  placeholder="Modelini tanlang"
-                  // defaultValue="model"
-                  onChange={handleChange}
-                  options={modelModal.map((i) => ({
-                    label: i.model,
-                    value: i.model,
-                  }))}
-                  {...field}
-                />
-              </Space>
-            )}
-          />
+          {transferMachine ? null : (
+            <Controller
+              control={control}
+              name="model"
+              render={({ field }) => (
+                <Space className="flex flex-col items-start">
+                  <Select
+                    className="w-96"
+                    placeholder="Modelini tanlang"
+                    // defaultValue="model"
+                    onChange={handleChange}
+                    options={modelModal.map((i) => ({
+                      label: i.model,
+                      value: i.model,
+                    }))}
+                    {...field}
+                  />
+                </Space>
+              )}
+            />
+          )}
 
           <Controller
             control={control}
@@ -432,52 +459,62 @@ const Machines = () => {
             )}
           />
 
-          <Controller
-            control={control}
-            name="line"
-            render={({ field }) => (
-              <Space className="flex flex-col items-start">
-                <Select
-                  placeholder="Liniyani tanlang"
+          {transferMachine ? null : (
+            <Controller
+              control={control}
+              name="line"
+              render={({ field }) => (
+                <Space className="flex flex-col items-start">
+                  <Select
+                    placeholder="Liniyani tanlang"
+                    className="w-96"
+                    // defaultValue="0"
+                    onChange={handleChange}
+                    // options={[...Array(18).keys()].map((i) => ({
+                    //   label: `${i}-liniya`,
+                    //   value: i,
+                    // }))}
+                    options={lineModal}
+                    {...field}
+                  />
+                </Space>
+              )}
+            />
+          )}
+
+          {transferMachine ? null : (
+            <Controller
+              className="w-96"
+              control={control}
+              name="serialNumber"
+              render={({ field }) => (
+                <Input
                   className="w-96"
-                  // defaultValue="0"
-                  onChange={handleChange}
-                  // options={[...Array(18).keys()].map((i) => ({
-                  //   label: `${i}-liniya`,
-                  //   value: i,
-                  // }))}
-                  options={lineModal}
+                  placeholder="Seria raqamini kiriting"
                   {...field}
                 />
-              </Space>
-            )}
-          />
-
-          <Controller
-            className="w-96"
-            control={control}
-            name="serialNumber"
-            render={({ field }) => (
-              <Input
-                className="w-96"
-                placeholder="Seria raqamini kiriting"
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="inventoryNumber"
-            render={({ field }) => (
-              <Input
-                className="w-96"
-                placeholder="Inventar raqamini kiriting"
-                {...field}
-              />
-            )}
-          />
+              )}
+            />
+          )}
+          {transferMachine ? null : (
+            <Controller
+              control={control}
+              name="inventoryNumber"
+              render={({ field }) => (
+                <Input
+                  className="w-96"
+                  placeholder="Inventar raqamini kiriting"
+                  {...field}
+                />
+              )}
+            />
+          )}
           <Button htmlType="submit" type="primary">
-            Qo'shish
+            {editMacine
+              ? "Tahrirlash"
+              : transferMachine
+              ? `Jo'natish`
+              : "Mashina qo'shish"}
           </Button>
         </Form>
       </Modal>
@@ -494,6 +531,8 @@ const Machines = () => {
         dataSource={sewingMachines.map((item) => ({ ...item, key: item.id }))}
         columns={columns}
       />
+      {/*------------------- O'chirish modal --------------------- */}
+
       <Modal
         // className=""
         width={200}
@@ -508,19 +547,20 @@ const Machines = () => {
       >
         O'chirilsinmi?
       </Modal>
-      <Modal
+      {/*------------------- Jo'natish modal --------------------- */}
+      {/* <Modal
         title="Jo'natish"
         width={200}
         centered={true}
         open={transferMachine}
         okText="Jo'natish"
         cancelText="Bekor qilish"
-        onOk={onTransferMachine}
+        // onOk={onTransferMachine}
         onCancel={() => {
           setTransferMachine(null);
         }}
       >
-        <Form className="w-96" onFinish={handleSubmit(onsubmit)}>
+        <Form className="w-96" onFinish={handleSubmit(onTransferMachine)}>
           <Controller
             control={control}
             name="location"
@@ -540,29 +580,8 @@ const Machines = () => {
               </Space>
             )}
           />
-
-          <Controller
-            control={control}
-            name="line"
-            render={({ field }) => (
-              <Space className="flex flex-col items-start">
-                <Select
-                  placeholder="Liniyani tanlang"
-                  className="w-96"
-                  // defaultValue="0"
-                  onChange={handleChange}
-                  // options={[...Array(18).keys()].map((i) => ({
-                  //   label: `${i}-liniya`,
-                  //   value: i,
-                  // }))}
-                  options={lineModal}
-                  {...field}
-                />
-              </Space>
-            )}
-          />
         </Form>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

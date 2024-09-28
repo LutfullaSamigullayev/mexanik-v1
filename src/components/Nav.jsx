@@ -2,19 +2,30 @@ import {
   GlobalOutlined,
   CheckSquareOutlined,
   ContainerOutlined,
+  UserOutlined,
+  ExportOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useDispatch } from "react-redux";
 import { setFilial } from "../redux/slices/machineSlice";
 import { Logo } from "./Logo";
 import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const Nav4 = () => {
   const dispatch = useDispatch();
 
   const location = useLocation();
 
+  // -----------  Localstorage start ------------------
+
   const location2 = localStorage.getItem("location");
+
+  const role = localStorage.getItem("role");
+
+  // -----------  Localstorage end ------------------
+
+  useEffect(() => {}, []);
 
   const navLinks = {
     admin: [
@@ -39,6 +50,12 @@ const Nav4 = () => {
             onClick: () => dispatch(setFilial("urganch")),
           },
         ],
+      },
+      {
+        key: "transfer",
+        icon: <ExportOutlined />,
+        label: <Link to={"/transfer"}>Jo'natma</Link>,
+        onClick: () => dispatch(setFilial("transfer")),
       },
 
       {
@@ -88,6 +105,23 @@ const Nav4 = () => {
           },
         ],
       },
+      {
+        key: "user",
+        label: "User",
+        icon: <UserOutlined />,
+        children: [
+          {
+            key: "user-profile",
+            label: <Link to={"/user"}>Profile</Link>,
+            // onClick: () => dispatch(setFilial("katqala")),
+          },
+          {
+            key: "user-notification",
+            label: <Link to={"/user"}>Notification</Link>,
+            // onClick: () => dispatch(setFilial("shovot")),
+          },
+        ],
+      },
       // {
       //   key: "grp",
       //   label: "Uztex Group",
@@ -118,6 +152,15 @@ const Nav4 = () => {
           },
         ],
       },
+
+      role == "admin"
+        ? {
+            key: "transfer",
+            icon: <ExportOutlined />,
+            label: <Link to={"/transfer"}>Jo'natma</Link>,
+            onClick: () => dispatch(setFilial("transfer")),
+          }
+        : null,
 
       {
         key: "inventory",
@@ -162,6 +205,15 @@ const Nav4 = () => {
         ],
       },
 
+      role == "admin"
+        ? {
+            key: "transfer",
+            icon: <ExportOutlined />,
+            label: <Link to={"/transfer"}>Jo'natma</Link>,
+            onClick: () => dispatch(setFilial("transfer")),
+          }
+        : null,
+
       {
         key: "inventory",
         label: "Inventarizatsiya",
@@ -204,6 +256,15 @@ const Nav4 = () => {
           },
         ],
       },
+
+      role == "admin"
+        ? {
+            key: "transfer",
+            icon: <ExportOutlined />,
+            label: <Link to={"/transfer"}>Jo'natma</Link>,
+            onClick: () => dispatch(setFilial("transfer")),
+          }
+        : null,
 
       {
         key: "inventory",

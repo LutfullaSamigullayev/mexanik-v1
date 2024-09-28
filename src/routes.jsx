@@ -5,6 +5,8 @@ import Login from "./pages/Login";
 import Machines from "./pages/Machines";
 import Mexanik from "./pages/Mexanik";
 import SignUp from "./pages/SignUp";
+import Transfer from "./pages/Transfer";
+import User from "./pages/User";
 
 export const routes = {
   public: [
@@ -54,6 +56,12 @@ export const routes = {
           id: 8,
           path: "/mexanik",
           element: <Mexanik />,
+          allowedRoles: ["admin"],
+        },
+        {
+          id: 9,
+          path: "/transfer",
+          element: <Transfer />,
           allowedRoles: ["admin"],
         },
       ],

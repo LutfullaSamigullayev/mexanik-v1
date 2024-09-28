@@ -12,9 +12,6 @@ const Home = () => {
       <div className="flex-auto">
         <Header />
         <Outlet />
-        {/* <Machines /> */}
-        {/* <Inventory /> */}
-        {/* <MachineSelect /> */}
       </div>
     </div>
   );
