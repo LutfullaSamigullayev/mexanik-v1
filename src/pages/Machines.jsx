@@ -35,6 +35,10 @@ const Machines = () => {
 
   const line = useSelector((state) => state.line);
 
+  const search = useSelector((state) => state.search);
+
+  // console.log("search: ", search);
+
   // -----------  Redux end ------------------
 
   // -----------  Localstorage start ------------------
@@ -186,15 +190,15 @@ const Machines = () => {
     getMacines();
   }
 
-  function onTransferMachine(data) {
-    Axios.patch(`sewing-machines/${transferMachine}`, { ...data })
-      .then((res) => console.log(res))
-      .then((err) => console.log(err));
+  // function onTransferMachine(data) {
+  //   Axios.patch(`sewing-machines/${transferMachine}`, { ...data })
+  //     .then((res) => console.log(res))
+  //     .then((err) => console.log(err));
 
-    setTransferMachine(null);
-    getMacines();
-    console.log(transferMachine);
-  }
+  //   setTransferMachine(null);
+  //   getMacines();
+  //   console.log(transferMachine);
+  // }
 
   // -----------  Axios end ------------------
 
@@ -258,7 +262,6 @@ const Machines = () => {
                 }}
               >
                 <ExportOutlined />
-                Jo'natish
               </Button>
               <Button
                 className="mx-1 rounded-full"
@@ -528,11 +531,18 @@ const Machines = () => {
           },
           showSizeChanger: true,
         }}
-        dataSource={sewingMachines.map((item) => ({ ...item, key: item.id }))}
+        dataSource={sewingMachines
+          .filter((item) => {
+            return search === ""
+              ? item
+              : item.serialNumber.toLowerCase().includes(search) ||
+                  item.inventoryNumber.toString().includes(search);
+          })
+          .map((item) => ({ ...item, key: item.id }))}
         columns={columns}
       />
       {/*------------------- O'chirish modal --------------------- */}
-
+      {console.log(sewingMachines)}
       <Modal
         // className=""
         width={200}

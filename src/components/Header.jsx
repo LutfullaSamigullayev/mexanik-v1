@@ -6,9 +6,7 @@ import { useEffect, useState } from "react";
 import { Axios } from "../lib/axios";
 import { useDispatch } from "react-redux";
 import { setFilial } from "../redux/slices/machineSlice";
-
-const { Search } = Input;
-const onSearch = (value, _e, info) => console.log(info?.source, value);
+import { setSearch } from "../redux/slices/searchSlice";
 
 export function Header() {
   // -----------  Localstorage start ------------------
@@ -27,6 +25,8 @@ export function Header() {
     return navigate("/login");
   };
   // -----------  Data start ------------------
+  const { Search } = Input;
+  const onSearch = (value, _e, info) => dispatch(setSearch(value));
 
   const [tranferMachines, setTransferMachines] = useState([]);
 
@@ -57,6 +57,10 @@ export function Header() {
       <Search
         placeholder="input search text"
         allowClear
+        onChange={(e) => {
+          dispatch(setSearch(e.target.value));
+          // console.log(e.target.value);
+        }}
         onSearch={onSearch}
         style={{
           width: 400,

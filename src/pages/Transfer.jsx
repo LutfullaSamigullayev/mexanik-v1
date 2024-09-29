@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Axios } from "../lib/axios";
 import { Button, Modal, Table } from "antd";
+import { useSelector } from "react-redux";
 
 const Transfer = () => {
   // -----------  Data start ------------------
@@ -18,6 +19,12 @@ const Transfer = () => {
   const [to, setTo] = useState(null);
 
   // -----------  Data end ------------------
+
+  // -----------  Redux start ------------------
+
+  const search = useSelector((state) => state.search);
+
+  // -----------  Redux end ------------------
 
   // -----------  Localstorage start ------------------
 
@@ -165,7 +172,14 @@ const Transfer = () => {
       </Modal>
       <Table
         columns={columns}
-        dataSource={tranferMachines.map((item) => ({ ...item, key: item.id }))}
+        dataSource={tranferMachines
+          .filter((item) => {
+            return search === ""
+              ? item
+              : item.serialNumber.toLowerCase().includes(search) ||
+                  item.inventoryNumber.toString().includes(search);
+          })
+          .map((item) => ({ ...item, key: item.id }))}
       />
       ;
     </>

@@ -60,6 +60,8 @@ const Inventory = () => {
 
   const filial = useSelector((state) => state.filial);
 
+  const search = useSelector((state) => state.search);
+
   // -----------  Redux end ------------------
 
   // -----------  Axios start ------------------
@@ -205,7 +207,14 @@ const Inventory = () => {
         <Table
           rowSelection={rowSelection}
           columns={newColumns}
-          dataSource={sewingMachines.map((item) => ({ ...item, key: item.id }))}
+          dataSource={sewingMachines
+            .filter((item) => {
+              return search === ""
+                ? item
+                : item.serialNumber.toLowerCase().includes(search) ||
+                    item.inventoryNumber.toString().includes(search);
+            })
+            .map((item) => ({ ...item, key: item.id }))}
         />
       </Flex>
     </>
