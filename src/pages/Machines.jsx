@@ -13,6 +13,7 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import { setFilial } from "../redux/slices/machineSlice";
+import { UploadFile } from "../components/Upload";
 
 const Machines = () => {
   // -----------  Data start ------------------
@@ -354,9 +355,12 @@ const Machines = () => {
         <Categories />
         <Selected />
         {role == "admin" ? (
-          <Button className="rounded-full" type="primary" onClick={showModal}>
-            <PlusCircleOutlined />
-          </Button>
+          <>
+            <UploadFile />
+            <Button className="rounded-full" type="primary" onClick={showModal}>
+              <PlusCircleOutlined />
+            </Button>
+          </>
         ) : null}
       </div>
       {/*------------------- O'zgartirish modal --------------------- */}
